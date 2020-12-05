@@ -2,7 +2,7 @@ require 'capybara/dsl'
 
 Capybara.default_driver = :selenium_chrome
 
-Coffee = Struct.new(:link, :name, keyword_init: true)
+Coffee = Struct.new(:link, :name, :notes, keyword_init: true)
 
 class HasBeanProductPage
   include Capybara::DSL
@@ -17,12 +17,17 @@ class HasBeanProductPage
     visit link
     Coffee.new(
       link: link,
-      name: extract_name
+      name: extract_name,
+      notes: extract_notes
     )
   end
 
   def extract_name
     find("h1").text
+  end
+
+  def extract_notes
+    find("p.h2").text
   end
 end
 
