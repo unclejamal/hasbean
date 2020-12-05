@@ -1,8 +1,10 @@
 require 'capybara/dsl'
 
 Capybara.default_driver = :selenium_chrome
+Capybara.ignore_hidden_elements = false
 
-Coffee = Struct.new(:link, :name, :notes, :price, keyword_init: true)
+CuppingNotes = Struct.new(:score, keyword_init: true)
+Coffee = Struct.new(:link, :name, :notes, :price, :cupping_notes, keyword_init: true)
 
 class HasBeanProductPage
   include Capybara::DSL
@@ -19,20 +21,28 @@ class HasBeanProductPage
       link: link,
       name: extract_name,
       notes: extract_notes,
-      price: extract_price
+      price: extract_price,
+      cupping_notes: extract_cupping_notes
     )
   end
 
   def extract_name
-    find("h1").text
+    find("div.product-single h1[itemprop='name']").text
   end
 
   def extract_notes
-    find("p.h2").text
+    find("div.product-single p.h2").text
   end
 
   def extract_price
-    find("span#ProductPrice").text
+    find("div.product-single span#ProductPrice").text
+  end
+
+  def extract_cupping_notes
+    total = all("div#cupping-notes strong", text: /Total:.*/).first
+    CuppingNotes.new(
+      score: total ? total.text.scan(/Total.*\): (.*)/).last : "n/a"
+    )
   end
 end
 
