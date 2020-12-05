@@ -2,7 +2,7 @@ require 'capybara/dsl'
 
 Capybara.default_driver = :selenium_chrome
 
-Coffee = Struct.new(:link, :name, :notes, keyword_init: true)
+Coffee = Struct.new(:link, :name, :notes, :price, keyword_init: true)
 
 class HasBeanProductPage
   include Capybara::DSL
@@ -18,7 +18,8 @@ class HasBeanProductPage
     Coffee.new(
       link: link,
       name: extract_name,
-      notes: extract_notes
+      notes: extract_notes,
+      price: extract_price
     )
   end
 
@@ -28,6 +29,10 @@ class HasBeanProductPage
 
   def extract_notes
     find("p.h2").text
+  end
+
+  def extract_price
+    find("span#ProductPrice").text
   end
 end
 
@@ -47,4 +52,4 @@ end
 
 
 table = HasBeanCoffeeCollectionPage.new.scrape
-puts table
+pp table
