@@ -2,7 +2,7 @@ require 'capybara/dsl'
 
 Capybara.default_driver = :selenium_chrome
 
-Coffee = Struct.new(:link)
+Coffee = Struct.new(:link, :name, keyword_init: true)
 
 class HasBeanProductPage
   include Capybara::DSL
@@ -14,7 +14,15 @@ class HasBeanProductPage
   end
 
   def scrape
-    Coffee.new(link)
+    visit link
+    Coffee.new(
+      link: link,
+      name: extract_name
+    )
+  end
+
+  def extract_name
+    find("h1").text
   end
 end
 
@@ -26,7 +34,7 @@ class HasBeanCoffeeCollectionPage
     visit "https://www.hasbean.co.uk/collections/coffee"
 
     coffees=all('.grid-link').to_a
-    coffee_links=coffees.map { |c| c['href'] }
+    coffee_links=coffees.take(2).map { |c| c['href'] }  # TODO: remove take
 
     return coffee_links.map { |cl| HasBeanProductPage.new(cl).scrape }
   end
