@@ -4,7 +4,7 @@ Capybara.default_driver = :selenium_chrome
 Capybara.ignore_hidden_elements = false
 
 CuppingNotes = Struct.new(:score, keyword_init: true)
-Coffee = Struct.new(:link, :name, :notes, :price, :cupping_notes, :roast, keyword_init: true)
+Coffee = Struct.new(:link, :name, :notes, :price, :cupping_notes, :roast, :country, keyword_init: true)
 
 class HasBeanProductPage
   include Capybara::DSL
@@ -23,7 +23,8 @@ class HasBeanProductPage
       notes: extract_notes,
       price: extract_price,
       cupping_notes: extract_cupping_notes,
-      roast: extract_roast
+      roast: extract_roast,
+      country: extract_country
     )
   end
 
@@ -49,6 +50,11 @@ class HasBeanProductPage
   def extract_roast
     roast = all("div#cupping-notes p", text: /Roast.*/).first
     roast.text.scan(/Roast.*Information(.*)/).last
+  end
+
+  def extract_country
+    country = all("div#details li", text: /Country:.*/).first
+    country ? country.text.scan(/Country:(.*)/)[0][0].strip : "n/a"
   end
 end
 
