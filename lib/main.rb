@@ -5,7 +5,7 @@ Capybara.ignore_hidden_elements = false
 
 Origin = Struct.new(:country, :province, :farm, keyword_init: true)
 CuppingNotes = Struct.new(:score, keyword_init: true)
-Coffee = Struct.new(:link, :name, :notes, :price, :cupping_notes, :roast, :origin, keyword_init: true)
+Coffee = Struct.new(:link, :name, :notes, :price, :cupping_notes, :roast, :origin, :process, keyword_init: true)
 
 class HasBeanProductPage
   include Capybara::DSL
@@ -25,7 +25,8 @@ class HasBeanProductPage
       price: extract_price,
       cupping_notes: extract_cupping_notes,
       roast: extract_roast,
-      origin: extract_origin
+      origin: extract_origin,
+      process: extract_process
     )
   end
 
@@ -55,13 +56,18 @@ class HasBeanProductPage
 
   def extract_origin
     country = all("div#details li", text: /Country:.*/).first
-    province = all("div#details li", text: /Province:.*/).first
-    farm = all("div#details li", text: /Farm:.*/).first
+    province = all("div#details li", text: /(Province|Region):.*/).first
+    farm = all("div#details li", text: /(Farm|Farm name):.*/).first
     Origin.new(
       country: country ? country.text.scan(/Country:(.*)/)[0][0].strip : "n/a",
-      province: province ? province.text.scan(/Province:(.*)/)[0][0].strip : "n/a",
-      farm: farm ? farm.text.scan(/Farm:(.*)/)[0][0].strip : "n/a"
+      province: province ? province.text.scan(/(Province|Region):(.*)/)[0][1].strip : "n/a",
+      farm: farm ? farm.text.scan(/(Farm|Farm name):(.*)/)[0][1].strip : "n/a"
     )
+  end
+
+  def extract_process
+    processing = all("div#details li", text: /(Process|Processing|Processing method):.*/).first
+    processing ? processing.text.scan(/(Process|Processing|Processing method):(.*)/)[0][1].strip : "n/a"
   end
 end
 
@@ -73,7 +79,7 @@ class HasBeanCoffeeCollectionPage
     visit "https://www.hasbean.co.uk/collections/coffee"
 
     coffees=all('.grid-link').to_a
-    coffee_links=coffees.map { |c| c['href'] }.take(3)  # TODO: remove take
+    coffee_links=coffees.map { |c| c['href'] }  # TODO: remove take
 
     return coffee_links.map { |cl| HasBeanProductPage.new(cl).scrape }
   end
