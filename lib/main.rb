@@ -39,7 +39,7 @@ class HasBeanProductPage
   end
 
   def extract_cupping_notes
-    total = all("div#cupping-notes strong", text: /Total:.*/).first
+    total = all("div#cupping-notes p", text: /Total.*:.*/).first
     CuppingNotes.new(
       score: total ? total.text.scan(/Total.*\): (.*)/).last : "n/a"
     )
@@ -54,7 +54,7 @@ class HasBeanCoffeeCollectionPage
     visit "https://www.hasbean.co.uk/collections/coffee"
 
     coffees=all('.grid-link').to_a
-    coffee_links=coffees.take(2).map { |c| c['href'] }  # TODO: remove take
+    coffee_links=coffees.map { |c| c['href'] }  # TODO: remove take
 
     return coffee_links.map { |cl| HasBeanProductPage.new(cl).scrape }
   end
@@ -62,4 +62,4 @@ end
 
 
 table = HasBeanCoffeeCollectionPage.new.scrape
-pp table
+puts table.map {|t| t.to_h}
