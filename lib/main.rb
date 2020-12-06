@@ -3,7 +3,7 @@ require 'capybara/dsl'
 Capybara.default_driver = :selenium_chrome
 Capybara.ignore_hidden_elements = false
 
-Origin = Struct.new(:country, keyword_init: true)
+Origin = Struct.new(:country, :province, keyword_init: true)
 CuppingNotes = Struct.new(:score, keyword_init: true)
 Coffee = Struct.new(:link, :name, :notes, :price, :cupping_notes, :roast, :origin, keyword_init: true)
 
@@ -55,8 +55,10 @@ class HasBeanProductPage
 
   def extract_origin
     country = all("div#details li", text: /Country:.*/).first
+    province = all("div#details li", text: /Province:.*/).first
     Origin.new(
-      country: country ? country.text.scan(/Country:(.*)/)[0][0].strip : "n/a"
+      country: country ? country.text.scan(/Country:(.*)/)[0][0].strip : "n/a",
+      province: province ? province.text.scan(/Province:(.*)/)[0][0].strip : "n/a"
     )
   end
 end
