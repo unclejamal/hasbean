@@ -43,13 +43,13 @@ class HasBeanProductPage
   def extract_cupping_notes
     total = all("div#cupping-notes p", text: /Total.*:.*/).first
     CuppingNotes.new(
-      score: total ? total.text.scan(/Total.*\): (.*)/).last : "n/a"
+      score: total ? total.text.scan(/Total.*\): (.*)/)[0][0] : "n/a"
     )
   end
 
   def extract_roast
     roast = all("div#cupping-notes p", text: /Roast.*/).first
-    roast.text.scan(/Roast.*Information(.*)/).last
+    roast.text.scan(/Roast.*Information(.*)/)[0][0]
   end
 
   def extract_country
