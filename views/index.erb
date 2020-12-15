@@ -20,7 +20,7 @@
         </tr>
         <% @table.each do |coffee| %>
           <tr>
-            <td><%= coffee.name %></td>
+            <td><a target="_blank" href="<%= coffee.link %>"><%= coffee.name %></a></td>
             <td><%= coffee.cupping_notes.score %></td>
             <td><%= coffee.price %></td>
           </tr>
