@@ -16,17 +16,17 @@
         <caption>Last updated at: <%= @last_updated || "not updated yet" %></caption>
         <tr>
           <th>Coffee</th>
-          <th>Roast</th>
-          <th>Notes</th>
           <th>Score</th>
+          <th>Notes</th>
+          <th>Roast</th>
           <th>Price</th>
         </tr>
         <% @table.each do |coffee| %>
           <tr>
             <td><a target="_blank" href="<%= coffee.link %>"><%= coffee.name %></a></td>
-            <td><%= coffee.roast_short %></td>
-            <td><%= coffee.notes %></td>
             <td><%= coffee.cupping_notes.score %></td>
+            <td><%= coffee.notes %></td>
+            <td><%= coffee.roast_short %></td>
             <td><%= coffee.price %></td>
           </tr>
         <% end %>
