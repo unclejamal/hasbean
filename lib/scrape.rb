@@ -80,12 +80,16 @@ end
 class HasBeanCoffeeCollectionPage
   include Capybara::DSL
 
+  def initialize(limit)
+    @limit = limit
+  end
+
   def scrape
     puts "PAWEL Scraping Collection Page"
     visit "https://www.hasbean.co.uk/collections/coffee"
 
     coffees=all('.grid-link').to_a
-    coffee_links=coffees.map { |c| c['href'] } # TODO: remove take
+    coffee_links=coffees.map { |c| c['href'] }.take(@limit)
 
     return coffee_links.map { |cl| HasBeanProductPage.new(cl).scrape }
   end
