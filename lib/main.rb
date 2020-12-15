@@ -23,6 +23,7 @@ class HasBeanProductPage
   end
 
   def scrape
+    puts "PAWEL scraping #{link}"
     visit link
     Coffee.new(
       link: link,
@@ -82,6 +83,7 @@ class HasBeanCoffeeCollectionPage
   include Capybara::DSL
 
   def scrape
+    puts "PAWEL Scraping Collection Page"
     visit "https://www.hasbean.co.uk/collections/coffee"
 
     coffees=all('.grid-link').to_a
@@ -91,8 +93,17 @@ class HasBeanCoffeeCollectionPage
   end
 end
 
+table = []
+
+Thread.new do
+  loop do
+    puts "PAWEL Refresh Start"
+    table = HasBeanCoffeeCollectionPage.new.scrape
+    puts "PAWEL Refresh End"
+    sleep 60*60 # sleep 1 hour
+  end
+end
 
 get '/' do
-  table = HasBeanCoffeeCollectionPage.new.scrape
   table.sort_by {|t| -t.cupping_notes.score_as_int}.map {|t| t.to_h.to_json}
 end
