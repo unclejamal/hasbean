@@ -92,5 +92,8 @@ class HasBeanCoffeeCollectionPage
 end
 
 
-table = HasBeanCoffeeCollectionPage.new.scrape
-puts table.sort_by {|t| -t.cupping_notes.score_as_int}.map {|t| t.to_h.to_json}
+get '/' do
+  table = HasBeanCoffeeCollectionPage.new.scrape
+  table.sort_by {|t| -t.cupping_notes.score_as_int}.map {|t| t.to_h.to_json}
+end
+
