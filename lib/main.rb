@@ -1,10 +1,16 @@
 require 'capybara/dsl'
+require 'json'
+require 'sinatra'
 
-Capybara.default_driver = :selenium_chrome
+Capybara.default_driver = :selenium_chrome_headless
 Capybara.ignore_hidden_elements = false
 
 Origin = Struct.new(:country, :province, :farm, keyword_init: true)
-CuppingNotes = Struct.new(:score, keyword_init: true)
+CuppingNotes = Struct.new(:score, keyword_init: true) do
+  def score_as_int
+    score != "n/a" ? score.to_i : -1
+  end
+end
 Coffee = Struct.new(:link, :name, :notes, :price, :cupping_notes, :roast, :origin, :process, keyword_init: true)
 
 class HasBeanProductPage
@@ -66,8 +72,8 @@ class HasBeanProductPage
   end
 
   def extract_process
-    processing = all("div#details li", text: /(Process|Processing|Processing method):.*/).first
-    processing ? processing.text.scan(/(Process|Processing|Processing method):(.*)/)[0][1].strip : "n/a"
+    process = all("div#details li", text: /(Process|Processing|Processing method):.*/).first
+    process ? process.text.scan(/(Process|Processing|Processing method):(.*)/)[0][1].strip : "n/a"
   end
 end
 
@@ -87,4 +93,4 @@ end
 
 
 table = HasBeanCoffeeCollectionPage.new.scrape
-puts table.map {|t| t.to_h}
+puts table.sort_by {|t| -t.cupping_notes.score_as_int}.map {|t| t.to_h.to_json}
