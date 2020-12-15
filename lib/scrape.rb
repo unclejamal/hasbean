@@ -1,6 +1,4 @@
 require 'capybara/dsl'
-require 'json'
-require 'sinatra'
 
 Capybara.default_driver = :selenium_chrome_headless
 Capybara.ignore_hidden_elements = false
@@ -87,23 +85,8 @@ class HasBeanCoffeeCollectionPage
     visit "https://www.hasbean.co.uk/collections/coffee"
 
     coffees=all('.grid-link').to_a
-    coffee_links=coffees.map { |c| c['href'] }  # TODO: remove take
+    coffee_links=coffees.map { |c| c['href'] }.take(3)  # TODO: remove take
 
     return coffee_links.map { |cl| HasBeanProductPage.new(cl).scrape }
   end
-end
-
-table = []
-
-Thread.new do
-  loop do
-    puts "PAWEL Refresh Start"
-    table = HasBeanCoffeeCollectionPage.new.scrape
-    puts "PAWEL Refresh End"
-    sleep 60*60 # sleep 1 hour
-  end
-end
-
-get '/' do
-  table.sort_by {|t| -t.cupping_notes.score_as_int}.map {|t| t.to_h.to_json}
 end

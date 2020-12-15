@@ -1,0 +1,18 @@
+<html>
+<body>
+<table>
+  <tr>
+    <th>Coffee</th>
+    <th>Score</th>
+    <th>Price</th>
+  </tr>
+  <% @table.each do |coffee| %>
+    <tr>
+      <td><%= coffee.name %></td>
+      <td><%= coffee.cupping_notes.score %></td>
+      <td><%= coffee.price %></td>
+    </tr>
+  <% end %>
+</table>
+</body>
+</html>
