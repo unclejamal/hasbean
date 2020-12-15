@@ -15,12 +15,14 @@
       <table class="table table-sm table-striped table-hover">
         <tr>
           <th>Coffee</th>
+          <th>Origin</th>
           <th>Score</th>
           <th>Price</th>
         </tr>
         <% @table.each do |coffee| %>
           <tr>
             <td><a target="_blank" href="<%= coffee.link %>"><%= coffee.name %></a></td>
+            <td><%= coffee.origin.country %></td>
             <td><%= coffee.cupping_notes.score %></td>
             <td><%= coffee.price %></td>
           </tr>
