@@ -13,19 +13,22 @@ if (ARGV.length > 0)
 end
 puts "PAWEL using limit of #{limit} coffees"
 
-coffees = []
+refreshed_coffees = []
+refreshed_last_updated = nil
 
 Thread.new do
   loop do
     puts "PAWEL Refresh Start"
-    coffees = HasBeanCoffeeCollectionPage.new(limit).scrape
-    coffees = coffees.sort_by {|c| -c.cupping_notes.score_as_int}
+    refreshed_coffees = HasBeanCoffeeCollectionPage.new(limit).scrape
+    refreshed_coffees = refreshed_coffees.sort_by {|c| -c.cupping_notes.score_as_int}
+    refreshed_last_updated = Time.now
     puts "PAWEL Refresh End"
     sleep 60*60 # sleep 1 hour
   end
 end
 
 get '/' do
-  @table = coffees
+  @table = refreshed_coffees
+  @last_updated = refreshed_last_updated
   erb :index
 end
