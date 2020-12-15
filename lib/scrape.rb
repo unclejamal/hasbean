@@ -11,7 +11,7 @@ CuppingNotes = Struct.new(:score, keyword_init: true) do
 end
 Coffee = Struct.new(:link, :name, :notes, :price, :cupping_notes, :roast, :origin, :process, keyword_init: true) do
   def roast_short
-    roast.partition("-").first
+    roast[0...22]
   end
 end
 

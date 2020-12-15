@@ -15,7 +15,6 @@
       <table class="table table-sm table-striped table-hover">
         <tr>
           <th>Coffee</th>
-          <th>Origin</th>
           <th>Roast</th>
           <th>Notes</th>
           <th>Score</th>
@@ -24,7 +23,6 @@
         <% @table.each do |coffee| %>
           <tr>
             <td><a target="_blank" href="<%= coffee.link %>"><%= coffee.name %></a></td>
-            <td><%= coffee.origin.country %></td>
             <td><%= coffee.roast_short %></td>
             <td><%= coffee.notes %></td>
             <td><%= coffee.cupping_notes.score %></td>
