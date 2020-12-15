@@ -16,6 +16,7 @@
         <tr>
           <th>Coffee</th>
           <th>Origin</th>
+          <th>Roast</th>
           <th>Score</th>
           <th>Price</th>
         </tr>
@@ -23,6 +24,7 @@
           <tr>
             <td><a target="_blank" href="<%= coffee.link %>"><%= coffee.name %></a></td>
             <td><%= coffee.origin.country %></td>
+            <td><%= coffee.roast_short %></td>
             <td><%= coffee.cupping_notes.score %></td>
             <td><%= coffee.price %></td>
           </tr>

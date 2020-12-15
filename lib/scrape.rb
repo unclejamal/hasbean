@@ -9,7 +9,11 @@ CuppingNotes = Struct.new(:score, keyword_init: true) do
     score != "n/a" ? score.to_i : -1
   end
 end
-Coffee = Struct.new(:link, :name, :notes, :price, :cupping_notes, :roast, :origin, :process, keyword_init: true)
+Coffee = Struct.new(:link, :name, :notes, :price, :cupping_notes, :roast, :origin, :process, keyword_init: true) do
+  def roast_short
+    roast.partition("-").first
+  end
+end
 
 class HasBeanProductPage
   include Capybara::DSL
