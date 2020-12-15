@@ -85,7 +85,7 @@ class HasBeanCoffeeCollectionPage
     visit "https://www.hasbean.co.uk/collections/coffee"
 
     coffees=all('.grid-link').to_a
-    coffee_links=coffees.map { |c| c['href'] }.take(3)  # TODO: remove take
+    coffee_links=coffees.map { |c| c['href'] } # TODO: remove take
 
     return coffee_links.map { |cl| HasBeanProductPage.new(cl).scrape }
   end
