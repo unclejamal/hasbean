@@ -1,3 +1,5 @@
+$stdout.sync = true
+
 require_relative './lib/scrape.rb'
 require 'sinatra'
 
