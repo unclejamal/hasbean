@@ -20,7 +20,7 @@ Thread.new do
   loop do
     puts "PAWEL Refresh Start"
     refreshed_coffees = HasBeanCoffeeCollectionPage.new(limit).scrape
-    refreshed_coffees = refreshed_coffees.sort_by {|c| -c.cupping_notes.score_as_int}
+    refreshed_coffees = refreshed_coffees.sort_by {|c| -c.cupping_notes.score_as_float}
     refreshed_last_updated = Time.now
     puts "PAWEL Refresh End"
     sleep 60*60 # sleep 1 hour

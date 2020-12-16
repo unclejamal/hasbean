@@ -5,8 +5,8 @@ Capybara.ignore_hidden_elements = false
 
 Origin = Struct.new(:country, :province, :farm, keyword_init: true)
 CuppingNotes = Struct.new(:score, keyword_init: true) do
-  def score_as_int
-    score != "n/a" ? score.to_i : -1
+  def score_as_float
+    score != "n/a" ? score.to_f : -1.0
   end
 end
 Coffee = Struct.new(:link, :name, :notes, :price, :cupping_notes, :roast, :origin, :process, keyword_init: true) do
