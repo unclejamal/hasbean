@@ -24,7 +24,7 @@
         <% @table.each do |coffee| %>
           <tr>
             <td><a target="_blank" href="<%= coffee.link %>"><%= coffee.name %></a></td>
-            <td><%= coffee.cupping_notes.score %></td>
+            <td><%= coffee.score %></td>
             <td><%= coffee.notes %></td>
             <td><%= coffee.roast_short %></td>
             <td><%= coffee.price %></td>

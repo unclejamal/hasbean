@@ -3,15 +3,15 @@ require 'capybara/dsl'
 Capybara.default_driver = :selenium_chrome_headless
 Capybara.ignore_hidden_elements = false
 
-Origin = Struct.new(:country, :province, :farm, keyword_init: true)
-CuppingNotes = Struct.new(:score, keyword_init: true) do
-  def score_as_float
-    score != "n/a" ? score.to_f : -1.0
-  end
-end
-Coffee = Struct.new(:link, :name, :notes, :price, :cupping_notes, :roast, :origin, :process, keyword_init: true) do
+Coffee = Struct.new(:link, :name, :score, :notes, :price, :roast,
+                    :process, :country, :province, :farm,
+                    keyword_init: true) do
   def roast_short
     roast[0...22]
+  end
+
+  def score_as_float
+    score != "n/a" ? score.to_f : -1.0
   end
 end
 
@@ -30,12 +30,14 @@ class HasBeanProductPage
     Coffee.new(
       link: link,
       name: extract_name,
+      score: extract_score,
       notes: extract_notes,
       price: extract_price,
-      cupping_notes: extract_cupping_notes,
       roast: extract_roast,
-      origin: extract_origin,
-      process: extract_process
+      process: extract_process,
+      country: extract_country,
+      province: extract_province,
+      farm: extract_farm,
     )
   end
 
@@ -51,11 +53,9 @@ class HasBeanProductPage
     find("div.product-single span#ProductPrice").text
   end
 
-  def extract_cupping_notes
+  def extract_score
     total = all("div#cupping-notes p", text: /Total.*:.*/).first
-    CuppingNotes.new(
-      score: total ? total.text.scan(/Total.*\): (.*)/)[0][0] : "n/a"
-    )
+    total ? total.text.scan(/Total.*\): (.*)/)[0][0] : "n/a"
   end
 
   def extract_roast
@@ -63,15 +63,19 @@ class HasBeanProductPage
     roast.text.scan(/Roast.*Information(.*)/)[0][0]
   end
 
-  def extract_origin
+  def extract_country
     country = all("div#details li", text: /Country:.*/).first
+    country ? country.text.scan(/Country:(.*)/)[0][0].strip : "n/a"
+  end
+
+  def extract_province
     province = all("div#details li", text: /(Province|Region):.*/).first
+    province ? province.text.scan(/(Province|Region):(.*)/)[0][1].strip : "n/a"
+  end
+
+  def extract_farm
     farm = all("div#details li", text: /(Farm|Farm name):.*/).first
-    Origin.new(
-      country: country ? country.text.scan(/Country:(.*)/)[0][0].strip : "n/a",
-      province: province ? province.text.scan(/(Province|Region):(.*)/)[0][1].strip : "n/a",
-      farm: farm ? farm.text.scan(/(Farm|Farm name):(.*)/)[0][1].strip : "n/a"
-    )
+    farm ? farm.text.scan(/(Farm|Farm name):(.*)/)[0][1].strip : "n/a"
   end
 
   def extract_process

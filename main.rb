@@ -1,36 +1,34 @@
 $stdout.sync = true
 
 require_relative './lib/scrape.rb'
+require_relative './lib/hasbean-coffees.rb'
 require 'sinatra'
-
-for i in 0 ... ARGV.length
-   puts "PAWEL ARGV #{i} #{ARGV[i]}"
-end
+require 'redis'
 
 limit = 999 # effectively no limit
-if (ARGV.length > 0)
-  if (ARGV[0] == "only-few-coffees")
-    limit = 3
-  end
+if (ENV["APP_MODE"] == "TEST")
+  limit = 3
 end
 puts "PAWEL using limit of #{limit} coffees"
 
-refreshed_coffees = []
-refreshed_last_updated = nil
+rurl=ENV['RURL']
+redis = Redis.new(url: rurl)
+snapshot_repository = HasBeanSnapshotRepository.new(redis)
 
 Thread.new do
   loop do
     puts "PAWEL Refresh Start"
-    refreshed_coffees = HasBeanCoffeeCollectionPage.new(limit).scrape
-    refreshed_coffees = refreshed_coffees.sort_by {|c| -c.cupping_notes.score_as_float}
-    refreshed_last_updated = Time.now
+    fresh_scrape = HasBeanCoffeeCollectionPage.new(limit).scrape
+    fresh_scrape = fresh_scrape.sort_by {|c| -c.score_as_float}
+    snapshot_repository.take_snapshot(fresh_scrape, Time.now)
     puts "PAWEL Refresh End"
     sleep 60*60 # sleep 1 hour
   end
 end
 
 get '/' do
-  @table = refreshed_coffees
-  @last_updated = refreshed_last_updated
+  snapshot = snapshot_repository.most_recent_snapshot
+  @table = snapshot.coffees
+  @last_updated = snapshot.last_updated
   erb :index
 end

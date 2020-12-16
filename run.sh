@@ -4,4 +4,7 @@ CHROMEDRIVER_PATH="/home/unclejamal/data/dev/ruby/projects/hasbean"
 export PATH="$PATH:$CHROMEDRIVER_PATH"
 echo "Path is: $PATH"
 
-ruby main.rb only-few-coffees
+export APP_MODE="TEST"
+export RURL="$1"
+
+ruby main.rb
