@@ -4,13 +4,12 @@ $LOAD_PATH << 'lib'
 require 'config'
 require 'refresh_data'
 require 'update_feed'
-require 'hasbean-coffees'
+require 'repository'
 require 'scrape'
 require 'sinatra'
 require 'redis'
 
-redis = Redis.new(url: Config.redis_url)
-repo = HasBeanSnapshotRepository.new(redis, Config.redis_prefix)
+repo = HasBeanRepository.new(Config.redis_url, Config.redis_prefix)
 
 Thread.new do
   RefreshData.new(repo).refresh
