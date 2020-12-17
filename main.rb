@@ -42,7 +42,6 @@ Thread.new do
     fresh_scrape = fresh_scrape.sort_by {|c| -c.score_as_float}
     snapshot_repository.take_snapshot(fresh_scrape, Time.now)
     puts "PAWEL Refresh End"
-    sleep 60*60 # sleep 1 hour
   end
 end
 
