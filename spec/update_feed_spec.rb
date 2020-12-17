@@ -1,4 +1,4 @@
-require 'compare_snapshots'
+require 'update_feed'
 require 'hasbean-coffees'
 require 'scrape'
 
@@ -55,5 +55,28 @@ describe Comparison do
   it "detects removed" do
     comparison = Comparison.new(added: [], removed: ["r"])
     expect(comparison.changed?).to eq(true)
+  end
+end
+
+
+
+describe MergeComparisons do
+  c1 = Comparison.new(added:"c1")
+  c2 = Comparison.new(added:"c2")
+  c3 = Comparison.new(added:"c3")
+  c4 = Comparison.new(added:"c4")
+  c5 = Comparison.new(added:"c5")
+  c6 = Comparison.new(added:"c6")
+
+  it "merges one" do
+      expect(subject.merge([], c1)).to eq([c1])
+  end
+
+  it "merges multiple" do
+      expect(subject.merge([c4,c3,c2,c1], c5)).to eq([c5,c4,c3,c2,c1])
+  end
+
+  it "removes oldest" do
+      expect(subject.merge([c5,c4,c3,c2,c1], c6)).to eq([c6,c5,c4,c3,c2])
   end
 end

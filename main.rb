@@ -1,8 +1,7 @@
 $stdout.sync = true
 $LOAD_PATH << 'lib'
 
-require 'compare_snapshots'
-require 'merge_comparisons'
+require 'update_feed'
 require 'hasbean-coffees'
 require 'scrape'
 require 'sinatra'
