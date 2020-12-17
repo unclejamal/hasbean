@@ -25,7 +25,7 @@ class HasBeanRepository
   end
 
   def get_update_feed
-    text_uf = @redis.get("#{@prefix}_update_feed")
+    text_uf = @redis.get("#{@prefix}_update_feed") || "[]"
     puts "PAWEL retrieved update feed: #{text_uf}"
     JSON.parse(text_uf).map {|h| Comparison.new(h)}
   end
