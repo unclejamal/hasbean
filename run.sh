@@ -7,4 +7,4 @@ echo "Path is: $PATH"
 export APP_MODE="TEST"
 export RURL="$1"
 
-ruby main.rb
+bundle exec ruby main.rb

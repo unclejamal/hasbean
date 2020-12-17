@@ -1,7 +1,8 @@
 $stdout.sync = true
+$LOAD_PATH << 'lib'
 
-require_relative './lib/scrape.rb'
-require_relative './lib/hasbean-coffees.rb'
+require 'hasbean-coffees'
+require 'scrape'
 require 'sinatra'
 require 'redis'
 
