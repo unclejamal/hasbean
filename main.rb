@@ -36,13 +36,11 @@ redis = Redis.new(url: Config.redis_url)
 snapshot_repository = HasBeanSnapshotRepository.new(redis, Config.redis_prefix)
 
 Thread.new do
-  loop do
-    puts "PAWEL Refresh Start"
-    fresh_scrape = HasBeanCoffeeCollectionPage.new(Config.limit).scrape
-    fresh_scrape = fresh_scrape.sort_by {|c| -c.score_as_float}
-    snapshot_repository.take_snapshot(fresh_scrape, Time.now)
-    puts "PAWEL Refresh End"
-  end
+  puts "PAWEL Refresh Start"
+  fresh_scrape = HasBeanCoffeeCollectionPage.new(Config.limit).scrape
+  fresh_scrape = fresh_scrape.sort_by {|c| -c.score_as_float}
+  snapshot_repository.take_snapshot(fresh_scrape, Time.now)
+  puts "PAWEL Refresh End"
 end
 
 get '/' do
