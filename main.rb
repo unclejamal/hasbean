@@ -5,20 +5,39 @@ require_relative './lib/hasbean-coffees.rb'
 require 'sinatra'
 require 'redis'
 
-limit = 999 # effectively no limit
-if (ENV["APP_MODE"] == "TEST")
-  limit = 3
-end
-puts "PAWEL using limit of #{limit} coffees"
+class Config
+  def self.app_mode
+    ENV["APP_MODE"]
+  end
 
-rurl=ENV['RURL']
-redis = Redis.new(url: rurl)
-snapshot_repository = HasBeanSnapshotRepository.new(redis)
+  def self.is_test_mode?
+    ENV["APP_MODE"]
+  end
+
+  def self.limit
+    value = Config.is_test_mode? ? 3 : 999 # 999 = effectively no limit
+    puts "PAWEL using limit of #{value} coffees"
+    value
+  end
+
+  def self.redis_prefix
+    value = Config.is_test_mode? ? "hasbeantest" : "hasbean"
+    puts "PAWEL using redis prefix of #{value}"
+    value
+  end
+
+  def self.redis_url
+    ENV['RURL']
+  end
+end
+
+redis = Redis.new(url: Config.redis_url)
+snapshot_repository = HasBeanSnapshotRepository.new(redis, Config.redis_prefix)
 
 Thread.new do
   loop do
     puts "PAWEL Refresh Start"
-    fresh_scrape = HasBeanCoffeeCollectionPage.new(limit).scrape
+    fresh_scrape = HasBeanCoffeeCollectionPage.new(Config.limit).scrape
     fresh_scrape = fresh_scrape.sort_by {|c| -c.score_as_float}
     snapshot_repository.take_snapshot(fresh_scrape, Time.now)
     puts "PAWEL Refresh End"
