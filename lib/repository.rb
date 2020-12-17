@@ -21,6 +21,7 @@ class HasBeanRepository
   end
 
   def store_update_feed(update_feed)
+    puts "PAWEL storing update feed: #{update_feed}"
     @redis.set("#{@prefix}_update_feed", update_feed.map {|c| c.to_h}.to_json)
   end
 
