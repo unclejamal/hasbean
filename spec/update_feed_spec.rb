@@ -1,5 +1,5 @@
 require 'update_feed'
-require 'hasbean-coffees'
+require 'repository'
 require 'scrape'
 
 describe CompareSnapshots do
