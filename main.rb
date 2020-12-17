@@ -1,37 +1,12 @@
 $stdout.sync = true
 $LOAD_PATH << 'lib'
 
+require 'config'
 require 'update_feed'
 require 'hasbean-coffees'
 require 'scrape'
 require 'sinatra'
 require 'redis'
-
-class Config
-  def self.app_mode
-    ENV["APP_MODE"]
-  end
-
-  def self.is_test_mode?
-    ENV["APP_MODE"]
-  end
-
-  def self.limit
-    value = Config.is_test_mode? ? 3 : 999 # 999 = effectively no limit
-    puts "PAWEL using limit of #{value} coffees"
-    value
-  end
-
-  def self.redis_prefix
-    value = Config.is_test_mode? ? "hasbeantest" : "hasbean"
-    puts "PAWEL using redis prefix of #{value}"
-    value
-  end
-
-  def self.redis_url
-    ENV['RURL']
-  end
-end
 
 redis = Redis.new(url: Config.redis_url)
 snapshot_repository = HasBeanSnapshotRepository.new(redis, Config.redis_prefix)
