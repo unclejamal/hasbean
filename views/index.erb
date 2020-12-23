@@ -17,19 +17,20 @@
         <div class="update-feed-comparison">
           <span><%= comparison.timestamp %></span>
             <% comparison.added.each do |coffee| %>
-             <div>
+             <div class="comparison-item">
               <span class="badge badge-success">+</span>
               <a target="_blank" href="<%= coffee.link %>"><%= coffee.name %></a>
             </div>
             <% end %>
             <% comparison.removed.each do |coffee| %>
-             <div>
+             <div class="comparison-item">
               <span class="badge badge-secondary">-</span>
               <a target="_blank" href="<%= coffee.link %>"><%= coffee.name %></a>
             </div>
             <% end %>
         </div>
         <% end %>
+
       <table class="table table-sm table-striped table-hover">
         <caption>Last updated at: <%= @last_updated || "not updated yet" %></caption>
         <tr>
