@@ -7,22 +7,27 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="/hasbean.css">
 
     <title>HasBean Coffees</title>
   </head>
   <body>
     <div class="container">
         <% @update_feed.each do |comparison| %>
-        <div>
+        <div class="update-feed-comparison">
           <span><%= comparison.timestamp %></span>
-          <ul>
             <% comparison.added.each do |coffee| %>
-              <li>+ <a target="_blank" href="<%= coffee.link %>"><%= coffee.name %></a></li>
+             <div>
+              <span class="badge badge-success">+</span>
+              <a target="_blank" href="<%= coffee.link %>"><%= coffee.name %></a>
+            </div>
             <% end %>
             <% comparison.removed.each do |coffee| %>
-              <li>- <a target="_blank" href="<%= coffee.link %>"><%= coffee.name %></a></li>
+             <div>
+              <span class="badge badge-secondary">+</span>
+              <a target="_blank" href="<%= coffee.link %>"><%= coffee.name %></a>
+            </div>
             <% end %>
-          </ul>
         </div>
         <% end %>
       <table class="table table-sm table-striped table-hover">
