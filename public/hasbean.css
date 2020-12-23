@@ -1,7 +1,19 @@
-.update-feed-comparison .comparison-item {
-  margin-left: 1em;
+.update-feed-comparison ul {
+  list-style: none;
 }
 
-.update-feed-comparison .badge {
-  width: 1.5em;
+.update-feed-comparison ul li.comparison-item-added::before {
+  content: "+";
+  font-weight: bold;
+  display: inline-block;
+  width: 1em;
+  margin-left: -1em;
+}
+
+.update-feed-comparison ul li.comparison-item-removed::before {
+  content: "-";
+  font-weight: bold;
+  display: inline-block;
+  width: 1em;
+  margin-left: -1em;
 }
