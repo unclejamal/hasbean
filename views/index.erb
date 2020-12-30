@@ -18,10 +18,10 @@
           <span><%= comparison.timestamp %></span>
             <ul>
             <% comparison.added.each do |coffee| %>
-              <li class="comparison-item-added"><a target="_blank" href="<%= coffee.link %>"><%= coffee.name %></a></li>
+              <li class="comparison-item-added"><a target="_blank" href="<%= coffee.link %>"><%= coffee.name %></a> - <%= coffee.score %>, <%= coffee.notes %></li>
             <% end %>
             <% comparison.removed.each do |coffee| %>
-              <li class="comparison-item-removed"><a target="_blank" href="<%= coffee.link %>"><%= coffee.name %></a></li>
+              <li class="comparison-item-removed"><a target="_blank" href="<%= coffee.link %>"><%= coffee.name %></a> - <%= coffee.score %>, <%= coffee.notes %></li>
             <% end %>
           </ul>
         </div>
