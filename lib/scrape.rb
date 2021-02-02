@@ -60,7 +60,7 @@ class HasBeanProductPage
 
   def extract_roast
     roast = all("div#cupping-notes p", text: /Roast.*/).first
-    roast.text.scan(/Roast.*Information(.*)/)[0][0]
+    roast ? roast.text.scan(/Roast.*Information(.*)/)[0][0] : "n/a"
   end
 
   def extract_country
