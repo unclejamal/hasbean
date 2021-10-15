@@ -54,11 +54,11 @@ class HasBeanProductPage
   end
 
   def extract_score
-    total = all("div#cupping-notes li", text: /Total: \(max. 100\).*:.*/).first
-    return total.text.scan(/Total: \(max. 100\).*: (.*)/)[0][0] if total
+    total = all("div#cupping-notes li", text: /Total.*\(max. 100\).*:.*/).first
+    return total.text.scan(/Total.*\(max. 100\).*: (.*)/)[0][0] if total
 
-    total = all("div#cupping-notes p", text: /Total: \(max. 100\).*:.*/).first
-    return total.text.scan(/Total: \(max. 100\).*: (.*)/)[0][0] if total
+    total = all("div#cupping-notes p", text: /Total.*\(max. 100\).*:.*/).first
+    return total.text.scan(/Total.*\(max. 100\).*: (.*)/)[0][0] if total
 
     return "n/a"
   end
