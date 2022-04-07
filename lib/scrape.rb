@@ -46,8 +46,8 @@ class HasBeanProductPage
   end
 
   def extract_notes
-    notes = all("div.product-container h4").first
-    notes ? notes.text.strip : "n/a"
+    notes = all("div.product-container ul.metafield-list li", text: /.*Flavour profile.*/).first
+    notes ? notes.text.scan(/.*Flavour profile (.*)/)[0][0] : "n/a"
   end
 
   def extract_price
@@ -90,7 +90,7 @@ end
 
 
 class HasBeanCoffeeCollectionPage
-  include Capybara::DSL
+  require 'open-uri'
 
   def initialize(limit)
     @limit = limit
@@ -98,15 +98,11 @@ class HasBeanCoffeeCollectionPage
 
   def scrape
     puts "PAWEL Scraping Collection Page"
-    visit "https://www.hasbean.co.uk/collections/coffee"
+    atom = open("http://www.hasbean.co.uk/collections/coffee.atom", {ssl_verify_mode: OpenSSL::SSL::VERIFY_NONE})
+    doc = Nokogiri::XML(atom)
 
-    while true do
-      button = all("button.btn", text: /Load More/).first
-      break if !button
-      button.click
-    end
+    coffees = doc.search('entry link')
 
-    coffees=all('li a.btn').to_a
     coffee_links=coffees.map { |c| c['href'] }.take(@limit)
 
     return coffee_links.map { |cl| HasBeanProductPage.new(cl).scrape }
