@@ -4,7 +4,7 @@ Capybara.default_driver = :selenium_chrome_headless
 Capybara.ignore_hidden_elements = false
 
 Coffee = Struct.new(:link, :name, :score, :notes, :price, :roast,
-                    :process, :country, :province, :farm,
+                    :process, :country, :province, :farm, :varietal,
                     keyword_init: true) do
   def roast_short
     roast[0...22]
@@ -12,6 +12,15 @@ Coffee = Struct.new(:link, :name, :score, :notes, :price, :roast,
 
   def score_as_float
     score != "n/a" ? score.to_f : -1.0
+  end
+
+  def alternative_name
+    [
+      country,
+      farm[0...18],
+      !!varietal ? varietal[0...18] : "n/a", # remove when update feed has varietals (mid April 2022)
+      process.split(/ |-/).map { |s| s[0] }.join.upcase
+    ].join(" | ")
   end
 end
 
@@ -38,6 +47,7 @@ class HasBeanProductPage
       country: extract_country,
       province: extract_province,
       farm: extract_farm,
+      varietal: extract_varietal,
     )
   end
 
@@ -78,13 +88,18 @@ class HasBeanProductPage
   end
 
   def extract_farm
-    farm = all("div.product-container li.accordion li", text: /(Farm|Farm name):.*/).first
-    farm ? farm.text.scan(/(Farm|Farm name):(.*)/)[0][1].strip : "n/a"
+    farm = all("div.product-container li.accordion li", text: /(Farm|Farm name|Estate):.*/).first
+    farm ? farm.text.scan(/(Farm|Farm name|Estate):(.*)/)[0][1].strip : "n/a"
+  end
+
+  def extract_varietal
+    varietal = all("div.product-container li.accordion li", text: /(Varietal|Varietals|Variety):.*/).first
+    varietal ? varietal.text.scan(/(Varietal|Varietals|Variety):(.*)/)[0][1].strip : "n/a"
   end
 
   def extract_process
-    process = all("div.product-container li.accordion  li", text: /(Process|Processing|Processing method):.*/).first
-    process ? process.text.scan(/(Process|Processing|Processing method):(.*)/)[0][1].strip : "n/a"
+    process = all("div.product-container li.accordion li", text: /(Processing system|Processing method|Processing|Process):.*/).first
+    process ? process.text.scan(/(Processing system|Processing method|Processing|Process):(.*)/)[0][1].strip : "n/a"
   end
 end
 
