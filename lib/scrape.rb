@@ -88,8 +88,8 @@ class HasBeanProductPage
   end
 
   def extract_farm
-    farm = all("div.product-container li.accordion li", text: /(Farm|Farm name|Estate):.*/).first
-    farm ? farm.text.scan(/(Farm|Farm name|Estate):(.*)/)[0][1].strip : "n/a"
+    farm = all("div.product-container li.accordion li", text: /(Farm|Farm name|Estate|Washing station):.*/).first
+    farm ? farm.text.scan(/(Farm|Farm name|Estate|Washing station):(.*)/)[0][1].strip : "n/a"
   end
 
   def extract_varietal
