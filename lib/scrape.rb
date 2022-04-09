@@ -132,9 +132,10 @@ class HasBeanCoffeeCollectionPage
     doc = Nokogiri::XML(atom)
 
     coffees = doc.search('entry link')
-
     coffee_links=coffees.map { |c| c['href'] }.take(@limit)
-
+    atom = nil
+    doc = nil
+    coffees = nil
     return coffee_links.map { |cl| HasBeanProductPage.new(cl).scrape }
   end
 end
