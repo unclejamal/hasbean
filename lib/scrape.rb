@@ -52,7 +52,14 @@ class HasBeanProductPage
   end
 
   def extract_name
-    find("div.product-container h1").text
+    content = page.html
+    begin
+      find("div.product-container h1").text
+    rescue Exception => e
+      # unexpected but it does happen in prod sometimes... why?
+      puts content
+      raise e
+    end
   end
 
   def extract_notes
