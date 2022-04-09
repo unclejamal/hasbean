@@ -6,7 +6,7 @@ Capybara.register_driver :selenium_chrome_headless do |app|
 
   options.add_argument('--headless')
   options.add_argument('--no-sandbox')
-  options.add_argument('--disable-dev-shm-usage')
+  options.add_argument('--disable-dev-shm-usage') # otherwise chrome tabs can crash on Heroku
 
   Capybara::Selenium::Driver.new(app, browser: :chrome, options: options)
 end
