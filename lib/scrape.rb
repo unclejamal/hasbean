@@ -59,8 +59,8 @@ class HasBeanProductPage
       # unexpected but it does happen in prod sometimes... why?
       puts "Original content"
       puts content
-      sleep 5
-      puts "5s content"
+      sleep 20
+      puts "20s content"
       puts page.html
       puts "Reraise"
       raise e
