@@ -16,6 +16,6 @@ end
 
 class MergeComparisons
   def merge(old_ones, fresh)
-    ([fresh] + old_ones).filter {|c| c.changed?}.first(5)
+    ([fresh] + old_ones).filter {|c| c.changed?}.first(2)
   end
 end
