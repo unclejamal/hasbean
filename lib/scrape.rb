@@ -59,8 +59,11 @@ class HasBeanProductPage
       # unexpected but it does happen in prod sometimes... why?
       puts "Original content"
       puts content
-      sleep 20
-      puts "20s content"
+      visit link
+      puts "another visit content for #{link}"
+      the_name = find("div.product-container h1").text
+      puts "found #{the_name}"
+      return the_name if !!the_name
       puts page.html
       puts "Reraise"
       raise e
