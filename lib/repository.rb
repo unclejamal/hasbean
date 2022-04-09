@@ -21,20 +21,20 @@ class HasBeanRepository
   end
 
   def store_update_feed(update_feed)
-    puts "PAWEL storing update feed: #{update_feed}"
+    #puts "PAWEL storing update feed: #{update_feed}"
 
     json_to_store = update_feed.map {|comp| {
       added: comp.added.map {|c| c.to_h},
       removed: comp.removed.map {|c| c.to_h},
       timestamp: comp.timestamp
     }}.to_json
-    puts "PAWEL storing update feed as json: #{json_to_store}"
+    #puts "PAWEL storing update feed as json: #{json_to_store}"
     @redis.set("#{@prefix}_update_feed", json_to_store)
   end
 
   def get_update_feed
     text_uf = @redis.get("#{@prefix}_update_feed") || "[]"
-    puts "PAWEL retrieved update feed as json: #{text_uf}"
+    #puts "PAWEL retrieved update feed as json: #{text_uf}"
     JSON.parse(text_uf).map {|json| Comparison.new(
       added: json["added"].map {|i| Coffee.new(i)},
       removed: json["removed"].map {|i| Coffee.new(i)},
