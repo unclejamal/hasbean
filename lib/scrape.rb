@@ -57,7 +57,12 @@ class HasBeanProductPage
       find("div.product-container h1").text
     rescue Exception => e
       # unexpected but it does happen in prod sometimes... why?
+      puts "Original content"
       puts content
+      sleep 5
+      puts "5s content"
+      puts page.html
+      puts "Reraise"
       raise e
     end
   end
